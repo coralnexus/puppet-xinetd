@@ -18,7 +18,7 @@ class xinetd {
   }
 
   service { 'xinetd':
-    ensure  => running,
+    ensure  => 'running',
     enable  => true,
     restart => '/etc/init.d/xinetd reload',
     require => [ Package['xinetd'],
