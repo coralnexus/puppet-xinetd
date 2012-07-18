@@ -47,37 +47,43 @@
 #   } # xinetd::service
 #
 define xinetd::service (
-  $port,
-  $server,
-  $ensure         = present,
-  $cps            = undef,
-  $flags          = undef,
-  $log_on_failure = undef,
-  $per_source     = undef,
-  $server_args    = undef,
-  $disable        = 'no',
-  $socket_type    = 'stream',
-  $protocol       = 'tcp',
-  $user           = 'root',
-  $group          = 'root',
-  $instances      = 'UNLIMITED',
-  $wait           = undef,
-  $bind           = '0.0.0.0',
-  $service_type   = undef
+
+  $port             = $xinetd::params::service_port,
+  $server           = $xinetd::params::service_server,
+  $ensure           = $xinetd::params::service_ensure,
+  $cps              = $xinetd::params::service_cps,
+  $flags            = $xinetd::params::service_flags,
+  $log_on_failure   = $xinetd::params::service_log_on_failure,
+  $per_source       = $xinetd::params::service_per_source,
+  $server_args      = $xinetd::params::service_server_args,
+  $disable          = $xinetd::params::service_disable,
+  $socket_type      = $xinetd::params::service_socket_type,
+  $protocol         = $xinetd::params::service_protocol,
+  $user             = $xinetd::params::service_user,
+  $group            = $xinetd::params::service_group,
+  $instances        = $xinetd::params::service_instances,
+  $wait             = $xinetd::params::service_wait,
+  $bind             = $xinetd::params::service_bind,
+  $service_type     = $xinetd::params::service_type,
+  $service_template = $xinetd::params::os_service_template,
+
 ) {
 
+  #-----------------------------------------------------------------------------
+
   if $wait {
-    $mywait = $wait
-  } else {
-    $mywait = $protocol ? {
+    $local_wait = $wait
+  }
+  else {
+    $local_wait = $protocol ? {
       tcp => 'no',
       udp => 'yes'
     }
   }
 
-  file { "/etc/xinetd.d/${name}":
+  file { "${xinetd::params::os_conf_dir}/${name}":
     ensure  => $ensure,
-    content => template('xinetd/service.erb'),
+    content => template($service_template),
     notify  => Service['xinetd'],
   }
 }
