@@ -6,7 +6,7 @@ class xinetd::params {
   #-----------------------------------------------------------------------------
   # General configurations
 
-  if $::hiera_exists {
+  if $::hiera_ready {
     $xinetd_package_ensure  = hiera('xinetd_package_ensure', $xinetd::default::xinetd_package_ensure)
     $xinetd_service_ensure  = hiera('xinetd_service_ensure', $xinetd::default::xinetd_service_ensure)
     $service_port           = hiera('xinetd_service_port', $xinetd::default::service_port)
