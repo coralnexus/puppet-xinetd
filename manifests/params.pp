@@ -11,7 +11,7 @@ class xinetd::params {
     $xinetd_service_ensure  = hiera('xinetd_service_ensure', $xinetd::default::xinetd_service_ensure)
     $service_port           = hiera('xinetd_service_port', $xinetd::default::service_port)
     $service_server         = hiera('xinetd_service_server', $xinetd::default::service_server)
-    $service_ensure         = hiera('xinetd_service_ensure', $xinetd::default::service_ensure)
+    $service_ensure         = hiera('xinetd_service_file_ensure', $xinetd::default::service_ensure)
     $service_cps            = hiera('xinetd_service_cps', $xinetd::default::service_cps)
     $service_flags          = hiera('xinetd_service_flags', $xinetd::default::service_flags)
     $service_log_on_failure = hiera('xinetd_service_log_on_failure', $xinetd::default::service_log_on_failure)
