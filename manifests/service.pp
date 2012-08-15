@@ -48,9 +48,10 @@
 #
 define xinetd::service (
 
+  $conf_dir         = $xinetd::params::conf_dir,
+  $conf_ensure      = $xinetd::params::service_conf_ensure,
   $port             = $xinetd::params::service_port,
   $server           = $xinetd::params::service_server,
-  $ensure           = $xinetd::params::service_ensure,
   $cps              = $xinetd::params::service_cps,
   $flags            = $xinetd::params::service_flags,
   $log_on_failure   = $xinetd::params::service_log_on_failure,
@@ -65,7 +66,7 @@ define xinetd::service (
   $wait             = $xinetd::params::service_wait,
   $bind             = $xinetd::params::service_bind,
   $service_type     = $xinetd::params::service_type,
-  $service_template = $xinetd::params::os_service_template,
+  $service_template = $xinetd::params::service_template,
 
 ) {
 
@@ -76,13 +77,13 @@ define xinetd::service (
   }
   else {
     $local_wait = $protocol ? {
-      tcp => 'no',
-      udp => 'yes'
+      udp        => 'yes',
+      default    => 'no',
     }
   }
 
-  file { "${xinetd::params::os_conf_dir}/${name}":
-    ensure  => $ensure,
+  file { "${conf_dir}/${name}":
+    ensure  => $conf_ensure,
     content => template($service_template),
     notify  => Service['xinetd'],
   }

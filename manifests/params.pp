@@ -1,72 +1,37 @@
 
-class xinetd::params {
+class xinetd::params inherits xinetd::default {
 
-  include xinetd::default
+  $package                = module_param('package')
+  $package_ensure         = module_param('package_ensure')
 
-  #-----------------------------------------------------------------------------
-  # General configurations
+  $service                = module_param('service')
+  $service_ensure         = module_param('service_ensure')
+  $restart_command        = module_param('restart_command')
 
-  if $::hiera_ready {
-    $xinetd_package_ensure  = hiera('xinetd_package_ensure', $xinetd::default::xinetd_package_ensure)
-    $xinetd_service_ensure  = hiera('xinetd_service_ensure', $xinetd::default::xinetd_service_ensure)
-    $service_port           = hiera('xinetd_service_port', $xinetd::default::service_port)
-    $service_server         = hiera('xinetd_service_server', $xinetd::default::service_server)
-    $service_ensure         = hiera('xinetd_service_file_ensure', $xinetd::default::service_ensure)
-    $service_cps            = hiera('xinetd_service_cps', $xinetd::default::service_cps)
-    $service_flags          = hiera('xinetd_service_flags', $xinetd::default::service_flags)
-    $service_log_on_failure = hiera('xinetd_service_log_on_failure', $xinetd::default::service_log_on_failure)
-    $service_per_source     = hiera('xinetd_service_per_source', $xinetd::default::service_per_source)
-    $service_server_args    = hiera('xinetd_service_server_args', $xinetd::default::service_server_args)
-    $service_disable        = hiera('xinetd_service_disable', $xinetd::default::service_disable)
-    $service_socket_type    = hiera('xinetd_service_socket_type', $xinetd::default::service_socket_type)
-    $service_protocol       = hiera('xinetd_service_protocol', $xinetd::default::service_protocol)
-    $service_user           = hiera('xinetd_service_user', $xinetd::default::service_user)
-    $service_group          = hiera('xinetd_service_group', $xinetd::default::service_group)
-    $service_instances      = hiera('xinetd_service_instances', $xinetd::default::service_instances)
-    $service_wait           = hiera('xinetd_service_wait', $xinetd::default::service_wait)
-    $service_bind           = hiera('xinetd_service_bind', $xinetd::default::service_bind)
-    $service_type           = hiera('xinetd_service_ensure', $xinetd::default::service_type)
-  }
-  else {
-    $xinetd_package_ensure  = $xinetd::default::xinetd_package_ensure
-    $xinetd_service_ensure  = $xinetd::default::xinetd_service_ensure
-    $service_port           = $xinetd::default::service_port
-    $service_server         = $xinetd::default::service_server
-    $service_ensure         = $xinetd::default::service_ensure
-    $service_cps            = $xinetd::default::service_cps
-    $service_flags          = $xinetd::default::service_flags
-    $service_log_on_failure = $xinetd::default::service_log_on_failure
-    $service_per_source     = $xinetd::default::service_per_source
-    $service_server_args    = $xinetd::default::service_server_args
-    $service_disable        = $xinetd::default::service_disable
-    $service_socket_type    = $xinetd::default::service_socket_type
-    $service_protocol       = $xinetd::default::service_protocol
-    $service_user           = $xinetd::default::service_user
-    $service_group          = $xinetd::default::service_group
-    $service_instances      = $xinetd::default::service_instances
-    $service_wait           = $xinetd::default::service_wait
-    $service_bind           = $xinetd::default::service_bind
-    $service_type           = $xinetd::default::service_type
-  }
+  #---
 
-  #-----------------------------------------------------------------------------
-  # Operating system specific configurations
+  $conf_dir               = module_param('conf_dir')
+  $config_file            = module_param('config_file')
+  $config_template        = module_param('config_template')
 
-  case $::operatingsystem {
-    debian, ubuntu: {
-      $os_xinetd_package   = 'xinetd'
-      $os_xinetd_service   = 'xinetd'
+  #---
 
-      $os_config_file      = '/etc/xinetd.conf'
-      $os_config_template  = 'xinetd/xinetd.conf.erb'
-
-      $os_conf_dir         = '/etc/xinetd.d'
-
-      $os_service_template = 'xinetd/service.erb'
-      $os_restart_command  = '/etc/init.d/xinetd reload'
-    }
-    default: {
-      fail("The xinetd module is not currently supported on ${::operatingsystem}")
-    }
-  }
+  $service_template       = module_param('service_template')
+  $service_conf_ensure    = module_param('service_conf_ensure')
+  $service_port           = module_param('service_port')
+  $service_server         = module_param('service_server')
+  $service_cps            = module_param('service_cps')
+  $service_flags          = module_param('service_flags')
+  $service_log_on_failure = module_param('service_log_on_failure')
+  $service_per_source     = module_param('service_per_source')
+  $service_server_args    = module_param('service_server_args')
+  $service_disable        = module_param('service_disable')
+  $service_socket_type    = module_param('service_socket_type')
+  $service_protocol       = module_param('service_protocol')
+  $service_user           = module_param('service_user')
+  $service_group          = module_param('service_group')
+  $service_instances      = module_param('service_instances')
+  $service_wait           = module_param('service_wait')
+  $service_bind           = module_param('service_bind')
+  $service_type           = module_param('service_type')
 }

@@ -11,14 +11,14 @@
 #
 class xinetd (
 
-  $package         = $xinetd::params::os_xinetd_package,
-  $package_ensure  = $xinetd::params::xinetd_package_ensure,
-  $service         = $xinetd::params::os_xinetd_service,
-  $service_ensure  = $xinetd::params::xinetd_service_ensure,
-  $restart_command = $xinetd::params::os_restart_command,
-  $conf_dir        = $xinetd::params::os_conf_dir,
-  $config_file     = $xinetd::params::os_config_file,
-  $config_template = $xinetd::params::os_config_template,
+  $package         = $xinetd::params::package,
+  $package_ensure  = $xinetd::params::package_ensure,
+  $service         = $xinetd::params::service,
+  $service_ensure  = $xinetd::params::service_ensure,
+  $restart_command = $xinetd::params::restart_command,
+  $conf_dir        = $xinetd::params::conf_dir,
+  $config_file     = $xinetd::params::config_file,
+  $config_template = $xinetd::params::config_template,
 
 ) inherits xinetd::params {
 
