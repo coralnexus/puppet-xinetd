@@ -48,25 +48,28 @@
 #
 define xinetd::service (
 
-  $conf_dir         = $xinetd::params::conf_dir,
-  $conf_ensure      = $xinetd::params::service_conf_ensure,
-  $port             = $xinetd::params::service_port,
-  $server           = $xinetd::params::service_server,
-  $cps              = $xinetd::params::service_cps,
-  $flags            = $xinetd::params::service_flags,
-  $log_on_failure   = $xinetd::params::service_log_on_failure,
-  $per_source       = $xinetd::params::service_per_source,
-  $server_args      = $xinetd::params::service_server_args,
-  $disable          = $xinetd::params::service_disable,
-  $socket_type      = $xinetd::params::service_socket_type,
-  $protocol         = $xinetd::params::service_protocol,
-  $user             = $xinetd::params::service_user,
-  $group            = $xinetd::params::service_group,
-  $instances        = $xinetd::params::service_instances,
-  $wait             = $xinetd::params::service_wait,
-  $bind             = $xinetd::params::service_bind,
-  $service_type     = $xinetd::params::service_type,
-  $service_template = $xinetd::params::service_template,
+  $conf_dir           = $xinetd::params::conf_dir,
+  $conf_ensure        = $xinetd::params::service_conf_ensure,
+  $services_listing   = $xinetd::params::services_listing,
+  $configure_firewall = $xinetd::params::service_configure_firewall,
+  $service_ports      = $xinetd::params::service_service_ports,
+  $port               = $xinetd::params::service_port,
+  $server             = $xinetd::params::service_server,
+  $cps                = $xinetd::params::service_cps,
+  $flags              = $xinetd::params::service_flags,
+  $log_on_failure     = $xinetd::params::service_log_on_failure,
+  $per_source         = $xinetd::params::service_per_source,
+  $server_args        = $xinetd::params::service_server_args,
+  $disable            = $xinetd::params::service_disable,
+  $socket_type        = $xinetd::params::service_socket_type,
+  $protocol           = $xinetd::params::service_protocol,
+  $user               = $xinetd::params::service_user,
+  $group              = $xinetd::params::service_group,
+  $instances          = $xinetd::params::service_instances,
+  $wait               = $xinetd::params::service_wait,
+  $bind               = $xinetd::params::service_bind,
+  $service_type       = $xinetd::params::service_type,
+  $service_template   = $xinetd::params::service_template,
 
 ) {
 
@@ -86,5 +89,44 @@ define xinetd::service (
     ensure  => $conf_ensure,
     content => template($service_template),
     notify  => Service['xinetd'],
+  }
+
+  #---
+
+  file_line { 'services-mapping':
+    path  => $services_listing,
+    line  => "${name} ${port}/${protocol} # ${name}",
+    match => "^${name}\s+",
+  }
+
+  #---
+
+  if $configure_firewall == 'true' {
+    if $port {
+      xinetd::service::rule { $port: }
+    }
+
+    if ! empty($service_ports) {
+      xinetd::service::rule { $service_ports: }
+    }
+  }
+}
+
+#-------------------------------------------------------------------------------
+
+define xinetd::service::rule( $port = $name ) {
+
+  $rule_description = "200 INPUT Allow Percona Cluster connections: $port"
+
+  #-----------------------------------------------------------------------------
+
+  if $port and ! defined(Firewall[$rule_description]) {
+    firewall { $rule_description:
+      action => accept,
+      chain  => 'INPUT',
+      state  => 'NEW',
+      proto  => 'tcp',
+      dport  => $port,
+    }
   }
 }

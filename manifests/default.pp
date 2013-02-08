@@ -1,28 +1,30 @@
 
 class xinetd::default {
 
-  $package_ensure         = 'present'
-  $service_ensure         = 'running'
-  $service_conf_ensure    = 'present'
+  $package_ensure             = 'present'
+  $service_ensure             = 'running'
+  $service_conf_ensure        = 'present'
 
-  $service_port           = ''
-  $service_server         = ''
-  $service_cps            = ''
-  $service_flags          = ''
-  $service_log_on_failure = ''
-  $service_per_source     = ''
-  $service_server_args    = ''
-  $service_disable        = 'no'
-  $service_socket_type    = 'stream'
-  $service_protocol       = 'tcp'
+  $service_configure_firewall = 'true'
+  $service_service_ports      = []
+  $service_port               = ''
+  $service_server             = ''
+  $service_cps                = ''
+  $service_flags              = ''
+  $service_log_on_failure     = ''
+  $service_per_source         = ''
+  $service_server_args        = ''
+  $service_disable            = 'no'
+  $service_socket_type        = 'stream'
+  $service_protocol           = 'tcp'
 
-  $service_user           = 'root'
-  $service_group          = 'root'
+  $service_user               = 'root'
+  $service_group              = 'root'
 
-  $service_instances      = 'UNLIMITED'
-  $service_wait           = ''
-  $service_bind           = '0.0.0.0'
-  $service_type           = ''
+  $service_instances          = 'UNLIMITED'
+  $service_wait               = ''
+  $service_bind               = '0.0.0.0'
+  $service_type               = ''
 
   #---
 
@@ -35,6 +37,8 @@ class xinetd::default {
       $config_template  = 'xinetd/xinetd.conf.erb'
 
       $conf_dir         = '/etc/xinetd.d'
+
+      $services_listing = '/etc/services'
 
       $service_template = 'xinetd/service.erb'
       $restart_command  = '/etc/init.d/xinetd reload'
