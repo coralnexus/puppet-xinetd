@@ -42,13 +42,15 @@ define xinetd::service (
 
   coral::file { $definition_name:
     resources => {
-      path => "${xinetd::params::conf_dir}/${service}",
-      ensure  => $conf_ensure,
-      content => render($xinetd::params::config_template_class, {
-        name       => $service,
-        attributes => $config
-      }),
-      notify  => Service["${base_name}_service"],
+      config => {
+        path => "${xinetd::params::conf_dir}/${service}",
+        ensure  => $conf_ensure,
+        content => render($xinetd::params::config_template_class, {
+          name       => $service,
+          attributes => $config
+        }),
+        notify  => Service["${base_name}_service"]
+      }
     }
   }
 
@@ -56,10 +58,12 @@ define xinetd::service (
 
   coral::file_line { $definition_name:
     resources => {
-      path   => $xinetd::params::services_listing,
-      line   => "${service} ${port}/${protocol} # ${service}",
-      match  => "^${service}\s+",
-      notify => Service["${base_name}_service"],
+      service => {
+        path   => $xinetd::params::services_listing,
+        line   => "${service} ${port}/${protocol} # ${service}",
+        match  => "^${service}\s+",
+        notify => Service["${base_name}_service"]
+      }
     }
   }
 
