@@ -1,40 +1,73 @@
 
 class xinetd::params inherits xinetd::default {
 
-  $package                = module_param('package')
-  $package_ensure         = module_param('package_ensure')
-
-  $service                = module_param('service')
-  $service_ensure         = module_param('service_ensure')
-  $restart_command        = module_param('restart_command')
+  $base_name = 'xinetd'
 
   #---
 
-  $conf_dir               = module_param('conf_dir')
-  $config_file            = module_param('config_file')
-  $config_template        = module_param('config_template')
-  $services_listing       = module_param('services_listing')
+  $build_package_names  = module_array('build_package_names')
+  $common_package_names = module_array('common_package_names')
+  $extra_package_names  = module_array('extra_package_names')
+  $package_ensure       = module_param('package_ensure', 'present')
 
   #---
 
-  $service_template           = module_param('service_template')
-  $service_conf_ensure        = module_param('service_conf_ensure')
-  $service_configure_firewall = module_param('service_configure_firewall')
-  $service_service_ports      = module_param('service_service_ports')
-  $service_port               = module_param('service_port')
-  $service_server             = module_param('service_server')
-  $service_cps                = module_param('service_cps')
-  $service_flags              = module_param('service_flags')
-  $service_log_on_failure     = module_param('service_log_on_failure')
-  $service_per_source         = module_param('service_per_source')
-  $service_server_args        = module_param('service_server_args')
-  $service_disable            = module_param('service_disable')
-  $service_socket_type        = module_param('service_socket_type')
-  $service_protocol           = module_param('service_protocol')
-  $service_user               = module_param('service_user')
-  $service_group              = module_param('service_group')
-  $service_instances          = module_param('service_instances')
-  $service_wait               = module_param('service_wait')
-  $service_bind               = module_param('service_bind')
-  $service_type               = module_param('service_type')
+  $service_name    = module_param('service_name')
+  $service_ensure  = module_param('service_ensure', 'running')
+  $restart_command = module_param('restart_command')
+
+  #---
+
+  $config_template_class = module_param('config_template_class', 'XinetdConf')
+
+  $conf_dir        = module_param('conf_dir')
+  $config_file     = module_param('config_file')
+  $config_template = module_param('config_template')
+
+  $config = module_hash('config', {
+    attributes => {
+      enabled         => undef,
+      disabled        => undef,
+      log_type        => [ 'SYSLOG', 'daemon', 'info' ],
+      log_on_failure  => 'HOST',
+      log_on_success  => [ 'PID', 'HOST', 'DURATION', 'EXIT' ],
+      no_access       => undef,
+      only_from       => undef,
+      max_load        => 0,
+      cps             => [ 50, 10 ],
+      instances       => 50,
+      per_source      => 10,
+      bind            => undef,
+      mdns            => 'yes',
+      v6only          => 'no',
+      passenv         => undef,
+      groups          => 'yes',
+      umask           => '002',
+      banner          => undef,
+      banner_fail     => undef,
+      banner_success  => undef
+    }
+  })
+
+  $services_listing = module_param('services_listing')
+
+  #---
+
+  $service_conf_ensure     = module_param('service_conf_ensure', 'present')
+  $service_port            = module_param('service_port')
+  $service_server          = module_param('service_server')
+  $service_cps             = module_param('service_cps')
+  $service_flags           = module_param('service_flags')
+  $service_log_on_failure  = module_param('service_log_on_failure')
+  $service_per_source      = module_param('service_per_source')
+  $service_server_args     = module_param('service_server_args')
+  $service_disable         = module_param('service_disable', 'no')
+  $service_socket_type     = module_param('service_socket_type', 'stream')
+  $service_protocol        = module_param('service_protocol', 'tcp')
+  $service_user            = module_param('service_user', 'root')
+  $service_group           = module_param('service_group', 'root')
+  $service_instances       = module_param('service_instances', 'UNLIMITED')
+  $service_wait            = module_param('service_wait')
+  $service_bind            = module_param('service_bind', '0.0.0.0')
+  $service_type            = module_param('service_type')
 }

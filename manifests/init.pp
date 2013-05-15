@@ -1,56 +1,89 @@
 # Class: xinetd
 #
-# This module manages xinetd
+#   This module manages xinetd services.
+#
+#   Adrian Webb <adrian.webb@coralnexus.com>
+#   2013-05-15
+#
+#   Tested platforms:
+#    - Ubuntu 12.04
+#
+# Parameters: (see <example/params.json> for Hiera configurations)
+#
+# Actions:
+#
+#  Installs, configures, and manages xinetd services.
+#
+# Requires:
 #
 # Sample Usage:
-#   xinetd::service { 'rsync':
-#     port        => '873',
-#     server      => '/usr/bin/rsync',
-#     server_args => '--daemon --config /etc/rsync.conf',
-#  }
 #
-class xinetd (
+#   include xinetd
+#
+class xinetd inherits xinetd::params {
 
-  $package         = $xinetd::params::package,
-  $package_ensure  = $xinetd::params::package_ensure,
-  $service         = $xinetd::params::service,
-  $service_ensure  = $xinetd::params::service_ensure,
-  $restart_command = $xinetd::params::restart_command,
-  $conf_dir        = $xinetd::params::conf_dir,
-  $config_file     = $xinetd::params::config_file,
-  $config_template = $xinetd::params::config_template,
-
-) inherits xinetd::params {
+  $base_name = $xinetd::params::base_name
 
   #-----------------------------------------------------------------------------
   # Installation
 
-  package { 'xinetd':
-    name   => $package,
-    ensure => $package_ensure,
+  coral::package { $base_name:
+    resources => {
+      build_packages  => {
+        name => $xinetd::params::build_package_names
+      },
+      common_packages => {
+        name    => $xinetd::params::common_package_names,
+        require => 'build_packages'
+      },
+      extra_packages  => {
+        name    => $xinetd::params::extra_package_names,
+        require => 'common_packages'
+      }
+    },
+    defaults  => {
+      ensure => $xinetd::params::package_ensure
+    }
   }
 
   #-----------------------------------------------------------------------------
   # Configuration
 
-  file { 'xinetd-config':
-    path    => $config_file,
-    content => template($config_template),
-    require => Package['xinetd'],
-    notify  => Service['xinetd'],
+  $default_config = render($xinetd::params::config_template_class, $xinetd::params::config)
+  $conf_dir       = $xinetd::params::conf_dir
+
+  coral::file { $base_name:
+    resources => {
+      config => {
+        path    => $xinetd::params::config_file,
+        content => template($xinetd::params::config_template),
+        notify  => Service["${base_name}_service"]
+      }
+    }
   }
+
+  #-----------------------------------------------------------------------------
+  # Actions
+
+  coral::exec { $base_name: }
 
   #-----------------------------------------------------------------------------
   # Services
 
-  service { 'xinetd':
-    name    => $service,
-    ensure  => $service_ensure,
-    enable  => true,
-    restart => $restart_command,
-    require => [
-      Package['xinetd'],
-      File['xinetd-config']
-    ],
+  coral::service { $base_name:
+    resources => {
+      service => {
+        name    => $xinetd::params::service_name,
+        ensure  => $xinetd::params::service_ensure,
+        restart => $xinetd::params::restart_command,
+      }
+    },
+    require => [ Coral::Package[$base_name], Coral::File[$base_name] ]
+  }
+
+  #---
+
+  coral::cron { $base_name:
+    require => Coral::Service[$base_name]
   }
 }
