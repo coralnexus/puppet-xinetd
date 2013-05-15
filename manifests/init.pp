@@ -76,6 +76,7 @@ class xinetd inherits xinetd::params {
         name    => $xinetd::params::service_name,
         ensure  => $xinetd::params::service_ensure,
         restart => $xinetd::params::restart_command,
+        enable  => true
       }
     },
     require => [ Coral::Package[$base_name], Coral::File[$base_name] ]
