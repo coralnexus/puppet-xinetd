@@ -51,7 +51,8 @@ define xinetd::service (
         }),
         notify  => Service["${base_name}_service"]
       }
-    }
+    },
+    defaults => { require => Coral::Package[$base_name] }
   }
 
   #---
