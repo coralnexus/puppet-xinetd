@@ -1,11 +1,12 @@
 
 module Coral
 module Template
-class XinetdConf < Base
+class XinetdConf < Plugin::Template
+  
   #-----------------------------------------------------------------------------
   # Renderers  
    
-  def render(input)
+  def render_processed(input)
     output = ( ! Util::Data.empty?(input['name']) && input['name'] != 'defaults' ? 'service ' + input['name'].to_s : "defaults" ) + "\n"
     output << "{\n"
     
