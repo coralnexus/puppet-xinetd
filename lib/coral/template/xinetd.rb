@@ -1,7 +1,7 @@
 
 module Coral
 module Template
-class XinetdConf < Plugin::Template
+class Xinetd < Plugin::Template
   
   #-----------------------------------------------------------------------------
   # Renderers  

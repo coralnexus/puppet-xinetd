@@ -18,7 +18,7 @@ class xinetd::params inherits xinetd::default {
 
   #---
 
-  $config_template_class = module_param('config_template_class', 'XinetdConf')
+  $config_template_provider = module_param('config_template_provider', 'xinetd')
 
   $conf_dir        = module_param('conf_dir')
   $config_file     = module_param('config_file')

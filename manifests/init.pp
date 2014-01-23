@@ -49,7 +49,7 @@ class xinetd inherits xinetd::params {
   #-----------------------------------------------------------------------------
   # Configuration
 
-  $default_config = render($xinetd::params::config_template_class, $xinetd::params::config)
+  $default_config = render($xinetd::params::config_template_provider, $xinetd::params::config)
   $conf_dir       = $xinetd::params::conf_dir
 
   coral::file { $base_name:
