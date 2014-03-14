@@ -1,5 +1,5 @@
 
-class xinetd::params {
+class xinetd::params inherits xinetd::default {
 
   $base_name = 'xinetd'
 
