@@ -40,7 +40,7 @@ define xinetd::service (
   #-----------------------------------------------------------------------------
   # Configuration
 
-  coral::file { $definition_name:
+  corl::file { $definition_name:
     resources => {
       config => {
         path => "${xinetd::params::conf_dir}/${service}",
@@ -52,12 +52,12 @@ define xinetd::service (
         notify  => Service["${base_name}_service"]
       }
     },
-    defaults => { require => Coral::Package[$base_name] }
+    defaults => { require => Corl::Package[$base_name] }
   }
 
   #---
 
-  coral::file_line { $definition_name:
+  corl::file_line { $definition_name:
     resources => {
       service => {
         path   => $xinetd::params::services_listing,
@@ -70,7 +70,7 @@ define xinetd::service (
 
   #---
 
-  coral::firewall { $definition_name:
+  corl::firewall { $definition_name:
     resources => {
       primary => {
         name  => "${port} INPUT Allow Xinetd connections",

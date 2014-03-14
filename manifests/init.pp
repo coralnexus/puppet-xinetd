@@ -27,7 +27,7 @@ class xinetd inherits xinetd::params {
   #-----------------------------------------------------------------------------
   # Installation
 
-  coral::package { $base_name:
+  corl::package { $base_name:
     resources => {
       build_packages  => {
         name => $xinetd::params::build_package_names
@@ -52,7 +52,7 @@ class xinetd inherits xinetd::params {
   $default_config = render($xinetd::params::config_template_provider, $xinetd::params::config)
   $conf_dir       = $xinetd::params::conf_dir
 
-  coral::file { $base_name:
+  corl::file { $base_name:
     resources => {
       config => {
         path    => $xinetd::params::config_file,
@@ -65,12 +65,12 @@ class xinetd inherits xinetd::params {
   #-----------------------------------------------------------------------------
   # Actions
 
-  coral::exec { $base_name: }
+  corl::exec { $base_name: }
 
   #-----------------------------------------------------------------------------
   # Services
 
-  coral::service { $base_name:
+  corl::service { $base_name:
     resources => {
       service => {
         name    => $xinetd::params::service_name,
@@ -79,12 +79,12 @@ class xinetd inherits xinetd::params {
         enable  => true
       }
     },
-    require => [ Coral::Package[$base_name], Coral::File[$base_name] ]
+    require => [ Corl::Package[$base_name], Corl::File[$base_name] ]
   }
 
   #---
 
-  coral::cron { $base_name:
-    require => Coral::Service[$base_name]
+  corl::cron { $base_name:
+    require => Corl::Service[$base_name]
   }
 }

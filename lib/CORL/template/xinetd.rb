@@ -1,7 +1,7 @@
 
-module Coral
+module CORL
 module Template
-class Xinetd < Plugin::Template
+class Xinetd < CORL.plugin_class(:template)
   
   #-----------------------------------------------------------------------------
   # Renderers  

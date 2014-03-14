@@ -1,11 +1,9 @@
 name    'coralnexus-xinetd'
-version '0.0.1'
+version '0.4.0'
 source 'git://github.com/coralnexus/puppet-xinetd'
-author 'Coral Nexus'
+author 'Adrian Webb'
 license 'Apache Version 2.0'
 summary 'Xinetd Module'
-description 'Coralized Xinetd Module for Debian and eventually other systems.'
+description 'Xinetd system management.'
 project_page 'http://github.com/coralnexus/puppet-xinetd'
-
-## Add dependencies, if any:
-dependency 'coralnexus/coral', '>= 0.0.1'
+dependency 'coralnexus/corl', '>= 0.4.0'
