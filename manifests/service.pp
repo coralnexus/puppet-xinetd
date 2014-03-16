@@ -14,7 +14,7 @@ define xinetd::service (
   $protocol = ensure($attributes['protocol'], $attributes['protocol'], $xinetd::params::service_protocol)
   $port     = ensure($attributes['port'], $attributes['port'], $xinetd::params::service_port)
 
-  $config = deep_merge({
+  $config = corl_merge({
       disable         => $xinetd::params::service_disable,
       socket_type     => $xinetd::params::service_socket_type,
       user            => $xinetd::params::service_user,
