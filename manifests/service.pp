@@ -45,7 +45,7 @@ define xinetd::service (
       config => {
         path => "${xinetd::params::conf_dir}/${service}",
         ensure  => $conf_ensure,
-        content => render($xinetd::params::config_template_class, {
+        content => render($xinetd::params::config_template_provider, {
           name       => $service,
           attributes => $config
         }),
