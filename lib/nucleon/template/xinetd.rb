@@ -1,7 +1,7 @@
 
-module CORL
+module Nucleon
 module Template
-class Xinetd < CORL.plugin_class(:template)
+class Xinetd < CORL.plugin_class(:nucleon, :template)
   
   #-----------------------------------------------------------------------------
   # Renderers  
