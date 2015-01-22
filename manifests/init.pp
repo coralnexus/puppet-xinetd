@@ -73,10 +73,11 @@ class xinetd inherits xinetd::params {
   corl::service { $base_name:
     resources => {
       service => {
-        name    => $xinetd::params::service_name,
-        ensure  => $xinetd::params::service_ensure,
-        restart => $xinetd::params::restart_command,
-        enable  => true
+        name     => $xinetd::params::service_name,
+        ensure   => $xinetd::params::service_ensure,
+        restart  => $xinetd::params::restart_command,
+        enable   => true,
+        provider => 'init'
       }
     },
     require => [ Corl::Package[$base_name], Corl::File[$base_name] ]
